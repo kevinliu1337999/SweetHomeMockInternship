@@ -752,8 +752,6 @@ public class FurnitureTable extends JTable implements View, Printable {
           return headerRendererLabel;
         }
       };
-    // Print the displayed columns and, if the home has levels, a Level column that helps to distinguish
-    // the furniture of each level, without changing the columns displayed in this table
     List<TableColumn> printedColumns = new ArrayList<TableColumn>();
     for (int columnIndex = 0, n = columnModel.getColumnCount(); columnIndex < n; columnIndex++) {
       printedColumns.add(columnModel.getColumn(columnIndex));

@@ -355,7 +355,6 @@ public class HomePrintableComponent extends JComponent implements Printable {
         furnitureFilter = furnitureTable.getFurnitureFilter();
         furnitureTable.setFurnitureFilter(new FurnitureTable.FurnitureFilter() {
             public boolean include(Home home, HomePieceOfFurniture piece) {
-              // Print the furniture of all the viewable levels when the plan or the 3D view is printed
               return (furnitureFilter == null || furnitureFilter.include(home, piece))
                   && (piece.getLevel() == null || piece.getLevel().isViewable());
             }
