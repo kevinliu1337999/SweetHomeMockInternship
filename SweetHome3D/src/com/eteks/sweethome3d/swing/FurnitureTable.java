@@ -126,6 +126,7 @@ public class FurnitureTable extends JTable implements View, Printable {
   private static final String EXPANDED_ROWS_VISUAL_PROPERTY = "com.eteks.sweethome3d.SweetHome3D.ExpandedGroups";
 
   private UserPreferences        preferences;
+  private Home                  home;
   private ListSelectionListener  tableSelectionListener;
   private boolean                selectionByUser;
   private int                    furnitureInformationRow;
@@ -148,6 +149,7 @@ public class FurnitureTable extends JTable implements View, Printable {
   public FurnitureTable(Home home, UserPreferences preferences, 
                        FurnitureController controller) {
     this.preferences = preferences;
+    this.home = home;
     float resolutionScale = SwingTools.getResolutionScale();
     if (resolutionScale != 1) {
       // Adapt row height to specified resolution scale
@@ -750,8 +752,18 @@ public class FurnitureTable extends JTable implements View, Printable {
           return headerRendererLabel;
         }
       };
+    // Print the displayed columns and, if the home has levels, a Level column that helps to distinguish
+    // the furniture of each level, without changing the columns displayed in this table
+    List<TableColumn> printedColumns = new ArrayList<TableColumn>();
     for (int columnIndex = 0, n = columnModel.getColumnCount(); columnIndex < n; columnIndex++) {
-      final TableColumn tableColumn = columnModel.getColumn(columnIndex);
+      printedColumns.add(columnModel.getColumn(columnIndex));
+    }
+    if (columnModel instanceof FurnitureTableColumnModel
+        && !this.home.getFurnitureVisibleProperties().contains(HomePieceOfFurniture.SortableProperty.LEVEL)
+        && !this.home.getLevels().isEmpty()) {
+      printedColumns.add(((FurnitureTableColumnModel)columnModel).availableColumns.get(HomePieceOfFurniture.SortableProperty.LEVEL));
+    }
+    for (final TableColumn tableColumn : printedColumns) {
       // Create a printable column from existing table column
       TableColumn printableColumn = new TableColumn();
       printableColumn.setIdentifier(tableColumn.getIdentifier());
